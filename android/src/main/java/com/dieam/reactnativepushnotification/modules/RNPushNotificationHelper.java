@@ -16,6 +16,12 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.Set;
+
 public class RNPushNotificationHelper {
     private static final long DEFAULT_VIBRATION = 1000L;
     private static final String TAG = RNPushNotificationHelper.class.getSimpleName();
@@ -96,7 +102,8 @@ public class RNPushNotificationHelper {
             Resources res = mContext.getResources();
             String packageName = mContext.getPackageName();
 
-            String title = bundle.getString("title");
+            MessageTarget messageTarget = parseMessage(bundle);
+            String title = messageTarget.title;
             if (title == null) {
                 ApplicationInfo appInfo = mContext.getApplicationInfo();
                 title = mContext.getPackageManager().getApplicationLabel(appInfo).toString();
@@ -114,7 +121,7 @@ public class RNPushNotificationHelper {
                 notification.setGroup(group);
             }
 
-            notification.setContentText(bundle.getString("message"));
+            notification.setContentText(messageTarget.message);
 
             String largeIcon = bundle.getString("largeIcon");
 
@@ -243,6 +250,15 @@ public class RNPushNotificationHelper {
         } catch (Exception e) {
             Log.e(TAG, "failed to send push notification", e);
         }
+    }
+
+    private class MessageTarget {
+        String title;
+        String message;
+    }
+
+    private MessageTarget parseMessage(Bundle bundle) {
+        return new Gson().fromJson(bundle.getString("message"), MessageTarget.class);
     }
 
     public void cancelAll() {
