@@ -160,7 +160,7 @@ public class RNPushNotificationHelper {
                     .setContentTitle(title)
                     .setTicker(bundle.getString("ticker"))
                     .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setAutoCancel(bundle.getBoolean("autoCancel", true));
 
             String group = bundle.getString("group");
@@ -217,11 +217,11 @@ public class RNPushNotificationHelper {
             notification.setSmallIcon(smallIconResId);
             String bigText = bundle.getString("bigText");
 
-            if (bigText == null) {
-                bigText = bundle.getString("message");
-            }
+            // if (bigText == null) {
+            //     bigText = bundle.getString("message");
+            // }
 
-            notification.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
+            // notification.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
 
             Intent intent = new Intent(context, intentClass);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
